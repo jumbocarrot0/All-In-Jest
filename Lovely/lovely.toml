@@ -17,6 +17,20 @@ G.GAME.hands[hand].chips = math.max(0, G.GAME.hands[hand].chips + (G.GAME.hands[
 '''
 match_indent = true
 
+
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "function Card:add_to_deck(*"
+position = "after"
+match_indent = true
+payload = '''
+    if not self.config.center.unlocked and self.config.center.rarity == 4 then
+        unlock_card(self.config.center)
+    end
+'''
+
 [[patches]]
 [patches.pattern]
 target = "functions/common_events.lua"
