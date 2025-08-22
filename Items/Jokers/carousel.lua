@@ -72,6 +72,14 @@ local carousel = {
 
             delay(0.5)
         end
+    end,
+
+
+    joker_display_def = function(JokerDisplay)
+        ---@type JDJokerDefinition
+        return {
+            -- Nothing
+        }
     end
 
 }

@@ -48,6 +48,14 @@ local lucky_seven = {
         end
     end
     return nil
+    end,
+
+
+    joker_display_def = function(JokerDisplay)
+        ---@type JDJokerDefinition
+        return {
+            -- Nothing
+        }
     end
   
 }

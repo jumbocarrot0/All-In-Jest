@@ -34,7 +34,15 @@ local founding_father = {
   
     calculate = function(self, card, context)
       
-    end 
+    end,
+
+
+    joker_display_def = function(JokerDisplay)
+        ---@type JDJokerDefinition
+        return {
+            -- Nothing
+        }
+    end
 }
 -- Override in charged.lua
 return { name = {"Jokers"}, items = {founding_father} }
