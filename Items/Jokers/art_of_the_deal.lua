@@ -4,10 +4,10 @@ local art_of_the_deal = {
 
     key = "art_of_the_deal",
     config = {
-      extra = {
-        mult = 0,
-        mult_mod = 1
-      }
+        extra = {
+            mult = 0,
+            mult_mod = 1
+        }
     },
     rarity = 2,
     pos = { x = 12, y = 1 },
@@ -18,33 +18,48 @@ local art_of_the_deal = {
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = false,
-  
+
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.mult, card.ability.extra.mult_mod} }
+        return { vars = { card.ability.extra.mult, card.ability.extra.mult_mod } }
     end,
-  
+
     calculate = function(self, card, context)
-      if context.jest_money_earned and context.jest_earned_sign == "+" and to_big(G.GAME.dollars) > to_big(0) and not context.blueprint then
-        card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-        return {
-          message = localize('k_upgrade_ex')
-        }
-      end
-      if to_big(G.GAME.dollars) <= to_big(0) and card.ability.extra.mult ~= 0 and not context.blueprint then
-        card.ability.extra.mult = 0
-        return {
-            message = localize('k_reset'),
-            colour = G.C.RED
-        }
-      end
-      if context.joker_main then
-        if card.ability.extra.mult > 0 then
-          return {
-            mult = card.ability.extra.mult,
-          }
+        if context.jest_money_earned and context.jest_earned_sign == "+" and to_big(G.GAME.dollars) > to_big(0) and not context.blueprint then
+            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+            return {
+                message = localize('k_upgrade_ex')
+            }
         end
-      end
+        if to_big(G.GAME.dollars) <= to_big(0) and card.ability.extra.mult ~= 0 and not context.blueprint then
+            card.ability.extra.mult = 0
+            return {
+                message = localize('k_reset'),
+                colour = G.C.RED
+            }
+        end
+        if context.joker_main then
+            if card.ability.extra.mult > 0 then
+                return {
+                    mult = card.ability.extra.mult,
+                }
+            end
+        end
+    end,
+
+
+    joker_display_def = function(JokerDisplay)
+        ---@type JDJokerDefinition
+        return {
+            text = {
+                { text = "+" },
+                { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult" }
+            },
+            text_config = { colour = G.C.MULT },
+            reminder_text = {
+                { text = "(>$0)" },
+            }
+        }
     end
-  
+
 }
-return { name = {"Jokers"}, items = {art_of_the_deal} }
+return { name = { "Jokers" }, items = { art_of_the_deal } }

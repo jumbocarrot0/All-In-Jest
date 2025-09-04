@@ -4,9 +4,9 @@ local plain_jane = {
 
     key = "plain_jane",
     config = {
-      extra = {
-        mult = 5
-      }
+        extra = {
+            mult = 5
+        }
     },
     rarity = 1,
     pos = { x = 15, y = 1 },
@@ -16,41 +16,67 @@ local plain_jane = {
     discovered = false,
     blueprint_compat = true,
     eternal_compat = true,
-  
+
     loc_vars = function(self, info_queue, card)
-      return {
-        vars = {
-          card.ability.extra.mult
-        }
-      }
-    end,
-  
-  calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play then
-      local scored_card = context.other_card
-      if scored_card.config.center == G.P_CENTERS.c_base then
         return {
-          mult = card.ability.extra.mult,
-          card = card
+            vars = {
+                card.ability.extra.mult
+            }
         }
-      end
-    end
-  end,
-  in_pool = function(self, args)
-    local enhancement_tally = 0
-    if G.GAME and G.playing_cards then
-        for _, card in ipairs(G.playing_cards) do
-            if card.config.center ~= G.P_CENTERS.c_base then
-                enhancement_tally = enhancement_tally + 1
+    end,
+
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play then
+            local scored_card = context.other_card
+            if scored_card.config.center == G.P_CENTERS.c_base then
+                return {
+                    mult = card.ability.extra.mult,
+                    card = card
+                }
             end
         end
+    end,
+    in_pool = function(self, args)
+        local enhancement_tally = 0
+        if G.GAME and G.playing_cards then
+            for _, card in ipairs(G.playing_cards) do
+                if card.config.center ~= G.P_CENTERS.c_base then
+                    enhancement_tally = enhancement_tally + 1
+                end
+            end
+        end
+        if enhancement_tally > 4 then
+            return true
+        else
+            return false
+        end
+    end,
+
+
+    joker_display_def = function(JokerDisplay)
+        ---@type JDJokerDefinition
+        return {
+            text = {
+                { text = "+" },
+                { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
+            },
+            text_config = { colour = G.C.MULT },
+            calc_function = function(card)
+                local mult = 0
+                local text, _, scoring_hand = JokerDisplay.evaluate_hand()
+                if text ~= 'Unknown' then
+                    for _, scoring_card in pairs(scoring_hand) do
+                        if scoring_card.config.center == G.P_CENTERS.c_base then
+                            mult = mult +
+                                card.ability.extra.mult *
+                                JokerDisplay.calculate_card_triggers(scoring_card, scoring_hand)
+                        end
+                    end
+                end
+                card.joker_display_values.mult = mult
+            end
+        }
     end
-    if enhancement_tally > 4 then
-        return true
-    else
-        return false
-    end
-  end,
-  
+
 }
-return { name = {"Jokers"}, items = {plain_jane} }
+return { name = { "Jokers" }, items = { plain_jane } }
