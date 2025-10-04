@@ -21,18 +21,19 @@ local penny = {
   
     loc_vars = function(self, info_queue, card)
       info_queue[#info_queue+1] = G.P_SEALS['Gold']
-      local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds)
       return {
         vars = {
-            numerator, denominator,
+          G.GAME.probabilities.normal,
+          card.ability.extra.odds
         }
       }
+      
     end,
   
     calculate = function(self, card, context)
       if context.repetition and context.other_card then
           if context.other_card.seal == 'Gold' then
-              if SMODS.pseudorandom_probability(card, 'penny' .. G.SEED, 1, card.ability.extra.odds) then
+              if pseudorandom('penny'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
                   return {
                       message = localize('k_again_ex'),
                       repetitions = 1,

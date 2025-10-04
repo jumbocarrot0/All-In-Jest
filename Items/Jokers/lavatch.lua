@@ -35,18 +35,11 @@ local lavatch = {
       if context.other_card:is_suit('Clubs') then
         local message_ = nil
         if not context.blueprint then
-          SMODS.scale_card(card, {
-	        ref_table = card.ability.extra,
-            ref_value = "xmult",
-	        scalar_value = "xmult_mod",
-            operation = '+',
-            scaling_message = {
-	            message = localize('k_upgrade_ex'),
-                colour = G.C.FILTER
-            }
-          })
+          card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_mod
+          message_ = localize('k_upgrade_ex')
         end
         return {
+          message = message_,
           x_mult = card.ability.extra.xmult,
           card = card,
           colour = G.C.RED

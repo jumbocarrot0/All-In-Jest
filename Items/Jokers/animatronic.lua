@@ -33,25 +33,18 @@ local animatronic = {
     if context.before and context.scoring_name and not context.blueprint then
       if context.poker_hands and next(context.poker_hands['Straight']) then
         if card.ability.extra.handsize < card.ability.extra.cap then
-          SMODS.scale_card(card, {
-	            ref_table = card.ability.extra,
-                ref_value = "handsize",
-	            scalar_value = "handsize_mod",
-                operation = '+',
-                scaling_message = {
-	                message = localize('a_handsize', 'v_dictionary'), 
-                    vars = {card.ability.extra.handsize_mod},
-	                colour = G.C.FILTER
-                }
-          })
+          card.ability.extra.handsize = card.ability.extra.handsize + card.ability.extra.handsize_mod
           G.hand:change_size(card.ability.extra.handsize_mod)
+          return {
+            message = "+1 Hand Size"
+          }
         end
       else
         if card.ability.extra.handsize > 0 then
           G.hand:change_size(-card.ability.extra.handsize)
           card.ability.extra.handsize = 0
           return {
-            message = localize('k_reset')
+            message = "Reset!"
           }
         end
       end

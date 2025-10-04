@@ -1,35 +1,25 @@
 local astrologer = {
     object_type = "Joker",
     order = 313,
+    ignore = true,
     key = "astrologer",
     config = {
-        extra = {
-            picks = 1
-        }
     },
-    rarity = 2,
+    rarity = 1,
     pos = { x = 10, y = 12},
     atlas = 'joker_atlas',
-    cost = 6,
+    cost = 4,
     unlocked = true,
-    discovered = false,
+    discovered = true,
     blueprint_compat = false,
-    eternal_compat = true,
+    eternal_compat = false,
   
     loc_vars = function(self, info_queue, card)
-        return { 
-            vars = {
-                card.ability.extra.picks
-            } 
-        }
+
     end,
   
     calculate = function(self, card, context)
-        if context.open_booster then
-          if context.card.config.center.kind == "Celestial" and G.GAME.jest_change_booster_options.pack_choices ~= "unlimited" then
-              G.GAME.pack_choices = G.GAME.pack_choices + card.ability.extra.picks
-          end
-      end
+        
     end
   
 }

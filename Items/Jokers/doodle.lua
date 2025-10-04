@@ -4,7 +4,9 @@ local doodle = {
 
     key = "doodle",
     config = {
-      
+      extra = {
+        odds = 2
+      }
     },
     rarity = 3,
     pos = { x = 24, y = 0 },
@@ -16,22 +18,15 @@ local doodle = {
     eternal_compat = true,
   
     loc_vars = function(self, info_queue, card)
-        local active_text = ""
-        if (G.GAME.round % 2) == 1 then 
-            active_text = localize('k_inactive')
-        else
-            active_text = localize('k_active')
-        end
-        return {
-            vars = {
-                active_text,
-            }
-        }
+      return { vars = { 
+        ''..(G.GAME and G.GAME.probabilities.normal or 1),
+        card.ability.extra.odds
+      } }
     end,
   --thank you unstable
   calculate = function(self, card, context)
     if card.is_doodle_calculating then
-        return
+        return nil, true
     end
     card.is_doodle_calculating = true 
 
@@ -66,7 +61,7 @@ local doodle = {
     local effect_to_return = nil
     local did_probability_pass = false 
 
-    if (G.GAME.round % 2) == 0 then
+    if pseudorandom('doodle' .. G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
       did_probability_pass = true 
 
       local effect1_def
@@ -96,7 +91,7 @@ local doodle = {
     if did_probability_pass then
         return effect_to_return 
     else
-        return 
+        return nil, true
     end
 end
   

@@ -24,12 +24,10 @@ local jumbo_joker = {
     end,
   
     add_to_deck = function(self, card, from_debuff)
-        if #SMODS.find_card("j_aij_jumbo_joker") <= 0 then
-            for k, joker in pairs(G.P_CENTER_POOLS['Booster']) do
-                if joker.set == 'Booster' and not (joker.name:find('Mega') or joker.name:find('Jumbo') or joker.key:find('mega') or joker.key:find('jumbo')) then 
-                    G.GAME.banned_keys[joker.key] = true
-                    table.insert(card.ability.extra.banned_cards, joker.key)
-                end
+        for k, joker in pairs(G.P_CENTER_POOLS['Booster']) do
+            if joker.set == 'Booster' and not (joker.name:find('Mega') or joker.name:find('Jumbo') or joker.key:find('mega') or joker.key:find('jumbo')) then 
+                G.GAME.banned_keys[joker.key] = true
+                table.insert(card.ability.extra.banned_cards, joker.key)
             end
         end
     end,
@@ -46,10 +44,8 @@ local jumbo_joker = {
         end
     end,
     remove_from_deck = function(self, card, from_debuff)
-        if #SMODS.find_card("j_aij_jumbo_joker") <= 0 then
-		    for _, key in ipairs(card.ability.extra.banned_cards) do
-                G.GAME.banned_keys[key] = nil
-            end
+		for _, key in ipairs(card.ability.extra.banned_cards) do
+            G.GAME.banned_keys[key] = nil
         end
 	end,
   

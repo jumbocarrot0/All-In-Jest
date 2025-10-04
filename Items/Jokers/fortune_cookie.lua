@@ -48,33 +48,8 @@ local fortune_cookie = {
                     end)}))
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_plus_tarot'), colour = G.C.PURPLE})
             end
-            local remaining_mod = {}
-            remaining_mod.num = 1
-            if (card.ability.extra.packs_remaining - 1) <= 0 then
-                SMODS.scale_card(card, {
-	                ref_table = card.ability.extra,
-                    ref_value = "packs_remaining",
-                    scalar_table = remaining_mod,
-	                scalar_value = "num",
-                    operation = '-',
-                    scaling_message = {
-	                    message = localize('k_eaten_ex'),
-                        colour = G.C.RED
-                    }
-                })
-            else
-                SMODS.scale_card(card, {
-	                ref_table = card.ability.extra,
-                    ref_value = "packs_remaining",
-                    scalar_table = remaining_mod,
-	                scalar_value = "num",
-                    operation = '-',
-                    scaling_message = {
-	                    message = card.ability.extra.packs_remaining.."/"..card.ability.extra.packs, 
-                        colour = G.C.FILTER
-                    }
-                })
-            end
+
+            card.ability.extra.packs_remaining = card.ability.extra.packs_remaining - 1
             if card.ability.extra.packs_remaining <= 0 then
                 G.E_MANAGER:add_event(Event({
                     func = function()
@@ -97,6 +72,12 @@ local fortune_cookie = {
                         return true
                     end
                 }))
+                return {
+                    message = localize('k_eaten_ex'),
+                    colour = G.C.RED
+                }
+            else
+                card_eval_status_text(card, 'extra', nil, nil, nil, { message = card.ability.extra.packs_remaining.."/"..card.ability.extra.packs, })
             end
         end
     end

@@ -31,16 +31,10 @@ local columbina = {
     calculate = function(self, card, context)
       if context.using_consumeable and not context.blueprint then
         if context.consumeable.ability.set == 'Spectral' then
-            SMODS.scale_card(card, {
-	            ref_table = card.ability.extra,
-                ref_value = "percent",
-	            scalar_value = "percent_mod",
-                operation = '+',
-                scaling_message = {
-	                message = card.ability.extra.percent .. "%",
-	                colour = G.C.FILTER
-                }
-            })
+            card.ability.extra.percent = card.ability.extra.percent + card.ability.extra.percent_mod
+            return {
+                message = card.ability.extra.percent .. "%"
+            }
         end
       end
 

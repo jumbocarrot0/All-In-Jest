@@ -35,15 +35,9 @@ local squeezy_pete = {
       if context.before and context.scoring_name then
           if not context.blueprint then
               if context.poker_hands and next(context.poker_hands['Full House']) then
-                  SMODS.scale_card(card, {
-	                  ref_table = card.ability.extra,
-                      ref_value = "xmult",
-	                  scalar_value = "bonus",
-                      operation = '+',
-                      scaling_message = {
-	                      message = localize('k_upgrade_ex'),
-	                      colour = G.C.FILTER
-                      }
+                  card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.bonus
+                  card_eval_status_text(card, 'extra', nil, nil, nil, {
+                      message = 'Upgrade!',
                   })
                   return nil, true
               else

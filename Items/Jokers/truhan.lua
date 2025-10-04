@@ -6,7 +6,7 @@ local truhan = {
     config = {
       extra = {
         xmult = 1,
-        xmult_mod = 0.1
+        xmult_mod = 0.05
       }
     },
     rarity = 2,
@@ -30,18 +30,13 @@ local truhan = {
   
     calculate = function(self, card, context)
       if context.jest_destroying_or_selling_joker then
-        SMODS.scale_card(card, {
-	        ref_table = card.ability.extra,
-            ref_value = "xmult",
-	        scalar_value = "xmult_mod",
-            operation = function(ref_table, ref_value, initial, change)
-	            ref_table[ref_value] = initial + (change * (context.jest_destroyed_joker.ability.jest_held_for or 0))
-            end,
-            scaling_message = {
-	            message = localize('k_upgrade_ex'),
-	            colour = G.C.FILTER
+        local curmod = card.ability.extra.xmult_mod * (context.jest_destroyed_joker.ability.jest_held_for or 0)
+        card.ability.extra.xmult = card.ability.extra.xmult + curmod
+        if curmod ~= 0 then
+            return {
+              message = localize('k_upgrade_ex')
             }
-        })
+        end
       end
       if context.joker_main then
         return {

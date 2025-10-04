@@ -27,25 +27,11 @@ local chippy = {
     end,
   
     calculate = function(self, card, context)
-      if context.money_altered and context.amount < 0 and not context.blueprint then
-        SMODS.scale_card(card, {
-	        ref_table = card.ability.extra,
-            ref_value = "chips",
-            scalar_table = context,
-	        scalar_value = "amount",
-            operation = function(ref_table, ref_value, initial, change)
-	            ref_table[ref_value] = initial + -change
-            end,
-            scaling_message = {
-	            message = localize('k_upgrade_ex'),
-	            colour = G.C.FILTER
-            },
-            block_overrides = {
-	            value = true,
-	            scalar = true,
-	            message = true,
-            }
-        })
+      if context.jest_money_earned and context.jest_earned_sign == "-" and not context.blueprint then
+        card.ability.extra.chips = card.ability.extra.chips + -context.jest_earned_amount
+        return {
+          message = localize('k_upgrade_ex'),
+        }
       end
       if context.joker_main and to_number(card.ability.extra.chips) > 0 then
         return {

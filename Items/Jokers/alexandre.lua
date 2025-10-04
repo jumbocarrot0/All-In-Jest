@@ -38,16 +38,10 @@ local alexandre = {
         end
       end
      if club_kings == all_cards and not context.blueprint then 
-        SMODS.scale_card(card, {
-	        ref_table = card.ability.extra,
-            ref_value = "mult",
-	        scalar_value = "mult_mod",
-            operation = '+',
-            scaling_message = {
-	            message = localize('k_upgrade_ex'),
-	            colour = G.C.FILTER
-            }
-        })
+        card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+        return {
+          message = localize('k_upgrade_ex')
+        }
       end
     end
     if context.joker_main then

@@ -15,11 +15,11 @@ local jester_zombie = {
     eternal_compat = true,
   
     loc_vars = function(self, info_queue, card)
-        local active_text = localize('k_inactive')
+        local active_text = "(Inactive)"
         if G.GAME.jest_jester_zombie_trigger then 
-            active_text = localize('k_active')
+            active_text = "(Active!)"
         else
-            active_text = localize('k_inactive')
+            active_text = "(Inactive)"
         end
         return { vars = {
             active_text

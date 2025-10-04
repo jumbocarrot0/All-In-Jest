@@ -16,11 +16,11 @@ local magic_mirror = {
     eternal_compat = true,
   
     loc_vars = function(self, info_queue, card)
-        local active_text = localize('k_inactive')
+        local active_text = "(Inactive)"
         if G.GAME.jest_magic_mirror_trigger then 
-            active_text = localize('k_active')
+            active_text = "(Active!)"
         else
-            active_text = localize('k_inactive')
+            active_text = "(Inactive)"
         end
         return { vars = {
             active_text
@@ -28,9 +28,6 @@ local magic_mirror = {
     end,
   
     calculate = function(self, card, context)
-      if context.ante_end then
-          G.GAME.jest_magic_mirror_trigger = false
-      end
       if context.individual and context.cardarea == G.play then
         if G.GAME.jest_magic_mirror_trigger then
             local cardd = context.other_card
@@ -53,4 +50,13 @@ local magic_mirror = {
     end
   
 }
+local ease_anteref = ease_ante
+function ease_ante(mod)
+    if mod ~= 0 then
+        G.GAME.jest_magic_mirror_trigger = true
+    end
+    
+    local ref = ease_anteref(mod)
+    return ref
+end
 return { name = {"Jokers"}, items = {magic_mirror} }

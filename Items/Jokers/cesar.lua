@@ -38,16 +38,10 @@ local cesar = {
           end
         end
        if diamond_kings == all_cards and not context.blueprint then 
-          SMODS.scale_card(card, {
-	            ref_table = card.ability.extra,
-                ref_value = "money",
-	            scalar_value = "money_mod",
-                operation = '+',
-                scaling_message = {
-	                message = localize('k_upgrade_ex'),
-	                colour = G.C.FILTER
-                }
-          })
+          card.ability.extra.money = card.ability.extra.money + card.ability.extra.money_mod
+          return {
+            message = localize('k_upgrade_ex')
+          }
         end
       end
     end,

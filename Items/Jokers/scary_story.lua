@@ -1,4 +1,3 @@
-
 local scary_story = {
     object_type = "Joker",
     order = 26,
